@@ -1,0 +1,38 @@
+{
+  "system": "PromptVerse Elite Content Generation System",
+  "strategy": {
+    "model": "outcome-first",
+    "no_prompt_spam": true,
+    "no_repeated_shells": true,
+    "premium_marketplace_standard": true
+  },
+  "imageDistributionTargets": {
+    "realisticPhotography": 40,
+    "commercialAdvertising": 20,
+    "portraits": 10,
+    "travel": 10,
+    "productPhotography": 10,
+    "architecture": 5,
+    "nature": 3,
+    "fantasy": 1,
+    "anime": 1
+  },
+  "referencePlaceholders": [
+    "[USER_PHOTO]",
+    "[FACE_REFERENCE]",
+    "[PRODUCT_REFERENCE]",
+    "[STYLE_REFERENCE]",
+    "[POSE_REFERENCE]",
+    "[COMPOSITION_REFERENCE]",
+    "[CHARACTER_REFERENCE]",
+    "[BRAND_REFERENCE]"
+  ],
+  "editorChecklist": [
+    "Solve a specific real-world outcome.",
+    "Use a category voice that matches the domain expert.",
+    "Avoid repeated openings and mass-generated phrasing.",
+    "Ensure examplePrompt is unique across the dataset.",
+    "Tag the industry and use case clearly.",
+    "Add only tools that genuinely fit the prompt."
+  ]
+}

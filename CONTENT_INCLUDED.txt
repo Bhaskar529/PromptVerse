@@ -1,0 +1,7 @@
+Prompt content has been preloaded into the project.
+
+Content folders:
+- content/image
+- content/video
+- content/audio
+- content/chat

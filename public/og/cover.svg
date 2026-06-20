@@ -1,0 +1,11 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0B0B14"/>
+  <circle cx="912" cy="132" r="228" fill="#8A63FF" fill-opacity="0.2"/>
+  <circle cx="338" cy="582" r="280" fill="#B79CFF" fill-opacity="0.18"/>
+  <path d="M162 432L332 154L502 432" stroke="#D8CCFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M244 432L332 280L420 432" stroke="#8A63FF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="332" cy="226" r="10" fill="#B79CFF"/>
+  <text x="560" y="250" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="96" font-weight="700">PromptVerse</text>
+  <text x="560" y="320" fill="#D8CCFF" font-family="Arial, Helvetica, sans-serif" font-size="34">The World's Largest AI Prompt Library</text>
+  <text x="560" y="390" fill="#BDBDD7" font-family="Arial, Helvetica, sans-serif" font-size="28">Static • SEO-first • Category-loaded</text>
+</svg>
