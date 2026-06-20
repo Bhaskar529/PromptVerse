@@ -2090,3 +2090,132 @@ img { display: block; max-width: 100%; height: auto; }
     transform: none;
   }
 }
+
+
+/* Bubble refinement override */
+.bubble-discovery__swarm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 190px));
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.subcategory-bubble,
+.subcategory-bubble--uniform,
+.subcategory-bubble--hero,
+.subcategory-bubble--large,
+.subcategory-bubble--medium,
+.subcategory-bubble--small {
+  width: 190px !important;
+  height: 190px !important;
+  min-width: 190px !important;
+  min-height: 190px !important;
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+.subcategory-bubble {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.2rem;
+}
+
+.subcategory-bubble__label {
+  position: relative;
+  z-index: 3;
+  font-weight: 600;
+  opacity: 1;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+
+.subcategory-bubble :is(svg, img, .lucide, [data-lucide], .subcategory-bubble__icon, .subcategory-bubble__art) {
+  opacity: 0.1 !important;
+  transform: scale(1);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.subcategory-bubble:hover :is(svg, img, .lucide, [data-lucide], .subcategory-bubble__icon, .subcategory-bubble__art) {
+  opacity: 0.18 !important;
+  transform: scale(1.04);
+}
+
+.subcategory-bubble::before,
+.subcategory-bubble::after {
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .bubble-discovery__swarm {
+    grid-template-columns: repeat(auto-fit, minmax(176px, 176px));
+    gap: 1rem;
+  }
+  .subcategory-bubble,
+  .subcategory-bubble--uniform,
+  .subcategory-bubble--hero,
+  .subcategory-bubble--large,
+  .subcategory-bubble--medium,
+  .subcategory-bubble--small {
+    width: 176px !important;
+    height: 176px !important;
+    min-width: 176px !important;
+    min-height: 176px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .bubble-discovery__swarm {
+    grid-template-columns: repeat(2, minmax(150px, 150px));
+    gap: 0.9rem;
+  }
+  .subcategory-bubble,
+  .subcategory-bubble--uniform,
+  .subcategory-bubble--hero,
+  .subcategory-bubble--large,
+  .subcategory-bubble--medium,
+  .subcategory-bubble--small {
+    width: 150px !important;
+    height: 150px !important;
+    min-width: 150px !important;
+    min-height: 150px !important;
+    padding: 1rem;
+  }
+  .subcategory-bubble__label {
+    font-size: 0.95rem;
+  }
+}
+
+
+/* Elegant title color refinement */
+.bubble-discovery__title--prismatic {
+  background: linear-gradient(135deg, #f3e7ff 0%, #d9c2ff 26%, #f4d5e7 52%, #bfd6ff 76%, #f5ecff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+
+.subcategory-bubble__label {
+  font-weight: 600;
+  opacity: 1;
+  text-shadow: 0 1px 10px rgba(10, 10, 30, 0.22);
+}
+
+.subcategory-bubble__meta {
+  color: rgba(244, 240, 255, 0.82);
+}
+
+.subcategory-bubble__chips,
+.subcategory-bubble__chip,
+.subcategory-bubble__tool,
+.subcategory-bubble__tools,
+.subcategory-bubble__stats [data-label="Tools"],
+.subcategory-bubble__stats [data-label="Rools"] {
+  display: none !important;
+}

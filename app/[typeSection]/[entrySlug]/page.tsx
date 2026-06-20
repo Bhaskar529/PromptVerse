@@ -101,8 +101,8 @@ export default async function DynamicTypePage({ params }: Props) {
           description={`Explore ${subcategory.promptCount} ${section.singular.toLowerCase()} pages, compatible tools, reusable templates, and related prompt variants in ${subcategory.subcategoryTitle}.`}
           stats={[
             { label: 'Prompt count', value: subcategory.promptCount },
-            { label: 'Tools', value: subcategory.tools.length },
-            { label: 'Tags', value: subcategory.tags.length },
+            { label: 'Tools', value: Array.isArray(subcategory.tools) ? subcategory.tools.length : 0 },
+            { label: 'Tags', value: Array.isArray(subcategory.tags) ? subcategory.tags.length : 0 },
           ]}
         />
         <div className="subcategory-prompts-grid mt-12 grid gap-6" style={{
@@ -205,7 +205,7 @@ export default async function DynamicTypePage({ params }: Props) {
 
         <div className="mt-8 rounded-[1.4rem] border p-5 sm:p-6" style={{ borderColor: 'rgba(183,156,255,0.16)', background: 'rgba(183,156,255,0.055)' }}>
           <p className="panel-label panel-label--template mb-3">
-            <Sparkles size={13} aria-hidden="true" /> Prompt structure
+            <Sparkles size={13} aria-hidden="true" /> Prompt details
           </p>
           <p style={{ color: 'rgba(255,255,255,0.76)', lineHeight: 1.75 }}>
             Every PromptVerse prompt is now normalized to follow a structured framework: role, purpose, audience, context, length, specific requirements, keywords/tools, and tone.

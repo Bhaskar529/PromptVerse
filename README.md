@@ -148,3 +148,49 @@ npm run build
 - No backend APIs.
 - No full-library downloads on the client.
 - Search is fully client-side and category-scoped.
+
+
+## Realism-First Content Methodology
+
+PromptVerse now follows a realism-first curation policy for prompt creation and normalization.
+
+### Core policy
+- No single industry should dominate the dataset; any single industry should remain below 5% of the total collection.
+- Cybersecurity is treated as a niche vertical, not a default prompt theme.
+- Realistic, commercial, editorial, cinematic, and documentary photography are the default visual modes unless a stylized mode is explicitly requested.
+- Anime, manga, cartoon, and illustration prompts are intentionally limited niche styles.
+- Image-reference and image-to-image workflows are first-class use cases.
+
+### Target image distribution
+- Realistic Photography: 40%
+- Commercial Advertising: 20%
+- Portrait Photography: 10%
+- Product Photography: 10%
+- Travel Photography: 5%
+- Food Photography: 5%
+- Architecture: 3%
+- Nature: 3%
+- Fantasy: 2%
+- Anime: 2%
+
+### Required image-reference placeholders
+- [USER_PHOTO]
+- [FACE_REFERENCE]
+- [CHARACTER_REFERENCE]
+- [PRODUCT_REFERENCE]
+- [STYLE_REFERENCE]
+- [POSE_REFERENCE]
+- [COMPOSITION_REFERENCE]
+- [BRAND_REFERENCE]
+- [ENVIRONMENT_REFERENCE]
+
+### Realism-first image prompt requirements
+Every image prompt should strongly prefer real-world production details such as:
+- Camera type
+- Lens type
+- Lighting setup
+- Composition direction
+- Environment and location
+- Mood and visual storytelling
+- Photography or film style
+- Real commercial or editorial use case
