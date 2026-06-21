@@ -156,26 +156,3 @@ Errors:");
 }
 
 main();
-
-
-const STRICT_REFERENCE_PLACEHOLDERS = ['[USER_PHOTO]','[FACE_REFERENCE]','[CHARACTER_REFERENCE]','[PRODUCT_REFERENCE]','[STYLE_REFERENCE]','[POSE_REFERENCE]','[COMPOSITION_REFERENCE]','[BRAND_REFERENCE]','[ENVIRONMENT_REFERENCE]'];
-const STRICT_PLACEHOLDER_RE = /\[[A-Z_]{2,}\]/g;
-
-function containsStrictPlaceholder(value: string): boolean {
-  return STRICT_PLACEHOLDER_RE.test(value || '');
-}
-
-function enforceExamplePlaceholderRule(prompts: any[], scopeLabel: string) {
-  let violations = 0;
-  for (const prompt of prompts) {
-    if (containsStrictPlaceholder(prompt.examplePrompt || '')) {
-      violations += 1;
-      console.error(`[FAIL] ${scopeLabel}: examplePrompt contains placeholders for ${prompt.id || prompt.slug || prompt.title}`);
-    }
-  }
-  return violations;
-}
-
-function countReferenceAwareTemplates(prompts: any[]) {
-  return prompts.filter((prompt) => STRICT_REFERENCE_PLACEHOLDERS.some((token) => (prompt.template || '').includes(token))).length;
-}

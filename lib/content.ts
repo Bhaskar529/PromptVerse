@@ -5,112 +5,6 @@ import type { PromptBundle, PromptRecord, SearchManifestSection } from '@/lib/ty
 
 const CONTENT_ROOT = path.join(process.cwd(), 'content');
 
-const REALISM_FIRST_POLICY = {
-  avoidDefaultAnime: true,
-  cybersecurityMaxShare: 0.05,
-  industryMaxShare: 0.05,
-  animeTargetShare: 0.02,
-};
-
-const REFERENCE_PLACEHOLDERS = [
-  '[USER_PHOTO]',
-  '[FACE_REFERENCE]',
-  '[CHARACTER_REFERENCE]',
-  '[PRODUCT_REFERENCE]',
-  '[STYLE_REFERENCE]',
-  '[POSE_REFERENCE]',
-  '[COMPOSITION_REFERENCE]',
-  '[BRAND_REFERENCE]',
-  '[ENVIRONMENT_REFERENCE]',
-];
-
-const REALISM_HINTS = [
-  'professional photography',
-  'commercial photography',
-  'editorial photography',
-  'advertising photography',
-  'lifestyle photography',
-  'luxury branding photography',
-  'corporate photography',
-  'travel photography',
-  'documentary photography',
-  'cinematic film photography',
-];
-
-function looksLikeImagePrompt(text: string, tags: string[] = [], tools: string[] = [], type?: string) {
-  const haystack = `${text} ${tags.join(' ')} ${tools.join(' ')} ${type ?? ''}`.toLowerCase();
-  return /(image|photo|photography|portrait|product|fashion|travel|thumbnail|poster|cover|midjourney|flux|sdxl|stable diffusion)/.test(haystack);
-}
-
-function containsStylizedBias(text: string) {
-  return /(anime|manga|cartoon|illustration|comic style)/i.test(text);
-}
-
-function ensureReferencePlaceholders(text: string) {
-  if (!text) return text;
-  if (/reference/i.test(text)) return text;
-  return text;
-}
-
-function buildRealismAddon(subcategory: string, tags: string[], tools: string[]) {
-  const lower = `${subcategory} ${tags.join(' ')} ${tools.join(' ')}`.toLowerCase();
-  if (/(portrait|headshot|linkedin|corporate|fashion|wedding|family)/.test(lower)) {
-    return 'Use a full-frame camera, 85mm portrait lens, flattering subject separation, clean skin texture, natural retouching, editorial composition, and realistic lighting.';
-  }
-  if (/(product|e-commerce|advertising|brand|luxury|packaging)/.test(lower)) {
-    return 'Use a high-end commercial product photography approach with accurate product proportions, premium studio lighting, clean reflections, controlled highlights, and sharp branding details.';
-  }
-  if (/(travel|tourism|destination|hotel|resort)/.test(lower)) {
-    return 'Use award-winning travel photography language, location authenticity, cinematic color grading, natural atmospheric depth, and believable documentary-style composition.';
-  }
-  if (/(food|restaurant|menu|culinary)/.test(lower)) {
-    return 'Use professional food photography with appetizing texture, natural steam or freshness cues, controlled depth of field, and realistic restaurant or studio lighting.';
-  }
-  if (/(real estate|interior|architecture|property)/.test(lower)) {
-    return 'Use architectural photography language, wide but natural perspective control, realistic daylight balancing, premium staging, and straight vertical lines.';
-  }
-  return 'Use realistic professional photography language with a clear camera perspective, lens choice, lighting direction, composition plan, believable environment, and cinematic or editorial finish.';
-}
-
-function prependRealismGuidance(text: string, subcategory: string, tags: string[], tools: string[], type?: string) {
-  if (!looksLikeImagePrompt(text, tags, tools, type)) return text;
-  const alreadyHasCamera = /(camera|lens|lighting|softbox|golden hour|cinematic color grading|editorial photography|commercial photography)/i.test(text);
-  const realismAddon = buildRealismAddon(subcategory, tags, tools);
-  let base = text.trim();
-  if (REALISM_FIRST_POLICY.avoidDefaultAnime && !containsStylizedBias(base) && !alreadyHasCamera) {
-    base = `${base}
-
-Visual direction: ${realismAddon}`;
-  }
-  return base;
-}
-
-function injectReferenceWorkflow(text: string, subcategory: string, tags: string[]) {
-  const lower = `${subcategory} ${tags.join(' ')}`.toLowerCase();
-  if (/(headshot|portrait|avatar|face|profile)/.test(lower) && !text.includes('[FACE_REFERENCE]') && !text.includes('[USER_PHOTO]')) {
-    return `${text}
-
-Reference support: Use [USER_PHOTO] or [FACE_REFERENCE] to preserve identity while adapting wardrobe, lighting, environment, and composition.`;
-  }
-  if (/(product|brand|e-commerce|packaging)/.test(lower) && !text.includes('[PRODUCT_REFERENCE]')) {
-    return `${text}
-
-Reference support: Use [PRODUCT_REFERENCE] or [BRAND_REFERENCE] to preserve product shape, branding, proportions, and packaging details.`;
-  }
-  if (/(outfit|fashion|pose|editorial)/.test(lower) && !text.includes('[STYLE_REFERENCE]')) {
-    return `${text}
-
-Reference support: Use [STYLE_REFERENCE], [POSE_REFERENCE], or [COMPOSITION_REFERENCE] to guide wardrobe, body language, and framing.`;
-  }
-  if (/(environment|interior|travel|real estate|architecture)/.test(lower) && !text.includes('[ENVIRONMENT_REFERENCE]')) {
-    return `${text}
-
-Reference support: Use [ENVIRONMENT_REFERENCE] or [COMPOSITION_REFERENCE] to guide setting continuity, perspective, and scene structure.`;
-  }
-  return text;
-}
-
-
 type TypeCache = {
   type: PromptType;
   bundles: PromptBundle[];
@@ -147,7 +41,6 @@ function toSentence(value: string) {
   if (!clean) return '';
   return /[.!?]$/.test(clean) ? clean : `${clean}.`;
 }
-
 
 function titleFromSlug(slug: string) {
   return titleCaseSlug(slug).replace(/Ai/g, 'AI');
@@ -525,20 +418,4 @@ export function getToolArchivePage(toolSlug: string, pageNumber = 1) {
 
 export function getToolPageData(toolSlug: string) {
   return getToolArchivePage(toolSlug, 1);
-}
-
-
-// Realism-first policy helpers added for future normalization integration.
-
-
-export function getContentPolicySummary() {
-  return {
-    realismFirst: true,
-    avoidDefaultAnime: REALISM_FIRST_POLICY.avoidDefaultAnime,
-    industryMaxShare: REALISM_FIRST_POLICY.industryMaxShare,
-    cybersecurityMaxShare: REALISM_FIRST_POLICY.cybersecurityMaxShare,
-    animeTargetShare: REALISM_FIRST_POLICY.animeTargetShare,
-    referencePlaceholders: REFERENCE_PLACEHOLDERS,
-    realismHints: REALISM_HINTS,
-  };
 }

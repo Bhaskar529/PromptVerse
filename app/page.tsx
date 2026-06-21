@@ -46,15 +46,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-2 sm:px-6 lg:px-8">
-        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] px-6 py-6 text-sm leading-7 text-white/80 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
-          <p className="verse-kicker">Realism-first library</p>
-          <p className="mt-3 max-w-4xl">
-            PromptVerse now favors realistic photography, commercial advertising, editorial imagery, business-ready use cases, and uploaded-image workflows over repetitive cybersecurity or anime-heavy content. Image prompts are designed to better support camera language, lens choice, lighting setup, composition, environment, mood, and reference-driven creation.
-          </p>
-        </div>
-      </section>
-
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-5 lg:grid-cols-4">
           {overview.map((section) => <CategoryCard key={section.slug} section={section} />)}
@@ -68,6 +59,9 @@ export default function HomePage() {
             <p className="verse-kicker text-xs uppercase">Featured prompts</p>
             <h2 className="verse-heading-soft mt-3 font-display text-4xl tracking-[-0.04em]">High-intent landing pages built for discovery</h2>
           </div>
+          <Link href="/image-prompts" className="rounded-full border border-white/10 px-5 py-3 text-sm text-white transition hover:bg-white/[0.08]">
+            Explore categories
+          </Link>
         </div>
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {featured.length ? featured.map((prompt) => <PromptCard key={prompt.slug} prompt={prompt} />) : (

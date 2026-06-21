@@ -11,43 +11,42 @@ export const dynamicParams = false;
 
 type Props = { params: Promise<{ typeSection: string }> };
 
-
 const bubbleHueMap: Record<string, string> = {
-  business: '#d7b66a', coding: '#6fa8ff', education: '#c7a7ff', finance: '#8bd7c8',
-  marketing: '#f2a26e', productivity: '#d99ef1', research: '#8fb8ff', startup: '#ffb98e',
-  writing: '#d9b9ff', ai: '#9b87ff', audio: '#f19fe3', video: '#88a0ff', chat: '#b6a8ff',
-  image: '#d5b0ff', photography: '#d5b0ff', travel: '#88d0ff', food: '#f0c06a', nature: '#8bd79e',
-  architecture: '#87cfe0', fashion: '#f09fc1', product: '#efd57a', music: '#d4a1ff', podcast: '#86dccd'
-};
-const getBubbleColor = (name: string) => bubbleHueMap[name.toLowerCase()] ?? '#d9d3ff';
-
-// removed duplicate color map
-const bubbleTextColorMap: Record<string, string> = {
-  photography: '#cab8ff',
-  portraits: '#c7a8ff',
-  portrait: '#c7a8ff',
-  nature: '#6ecf9a',
-  travel: '#7fc8ff',
-  food: '#e9b35f',
-  architecture: '#73d4de',
-  fashion: '#ec8fb3',
-  'product photography': '#e3bf63',
-  business: '#e7c85f',
-  marketing: '#f09a56',
-  coding: '#5ea5ff',
-  ai: '#8d73ff',
-  music: '#d89bf8',
-  podcast: '#5ec9b6',
-  video: '#8d82ff',
+  business: '#d7b66a',
+  coding: '#6fa8ff',
+  education: '#c7a7ff',
+  finance: '#8bd7c8',
+  marketing: '#f2a26e',
+  productivity: '#d99ef1',
+  research: '#8fb8ff',
+  startup: '#ffb98e',
+  writing: '#d9b9ff',
+  ai: '#9b87ff',
+  audio: '#f19fe3',
+  video: '#88a0ff',
+  chat: '#b6a8ff',
+  image: '#d5b0ff',
+  photography: '#d5b0ff',
+  travel: '#88d0ff',
+  food: '#f0c06a',
+  nature: '#8bd79e',
+  architecture: '#87cfe0',
+  fashion: '#f09fc1',
+  product: '#efd57a',
+  music: '#d4a1ff',
+  podcast: '#86dccd',
 };
 
-function getBubbleTextColor(name: string) {
+const getBubbleColor = (name: string) => {
   const lower = name.toLowerCase();
-  const exact = bubbleTextColorMap[lower];
-  if (exact) return exact;
-  const partial = Object.entries(bubbleTextColorMap).find(([key]) => lower.includes(key));
-  return partial?.[1] ?? '#d9d6f7';
-}
+  return bubbleHueMap[lower]
+    ?? Object.entries(bubbleHueMap).find(([key]) => lower.includes(key))?.[1]
+    ?? '#d9d3ff';
+};
+
+const bubbleSizeClasses = [
+  'subcategory-bubble--uniform',
+] as const;
 
 export function generateStaticParams() {
   return ['image-prompts', 'video-prompts', 'audio-prompts', 'chat-prompts'].map((typeSection) => ({ typeSection }));
@@ -93,7 +92,7 @@ export default async function TypeSectionPage({ params }: Props) {
         <div className="bubble-discovery__header">
           <div>
             <p className="verse-kicker text-xs uppercase">Bubble discovery</p>
-            <h2 id="subcategory-bubbles-title" className="verse-heading-soft mt-3 font-display text-4xl tracking-[-0.04em] sm:text-5xl">
+            <h2 id="subcategory-bubbles-title" className="bubble-hero-heading mt-3 font-display text-4xl tracking-[-0.05em] sm:text-5xl lg:text-6xl">
               Explore the living subcategory ecosystem
             </h2>
           </div>
@@ -105,9 +104,8 @@ export default async function TypeSectionPage({ params }: Props) {
         {sortedBundles.length ? (
           <div className="bubble-field" role="list" aria-label={`${section.title} subcategories`}>
             {sortedBundles.map((bundle, index) => {
-              const sizeClass = 'subcategory-bubble--uniform';
-
-              const tags = bundle.tags.slice(0, sizeClass === 'subcategory-bubble--small' ? 1 : 2);
+              const sizeClass = bubbleSizeClasses[0];
+              const tags = bundle.tags.slice(0, 2);
 
               return (
                 <Link
@@ -122,10 +120,9 @@ export default async function TypeSectionPage({ params }: Props) {
                   <span className="subcategory-bubble__ripple" aria-hidden="true" />
                   <span className="subcategory-bubble__inner">
                     <span className="subcategory-bubble__eyebrow">Subcategory</span>
-                    <span className="subcategory-bubble__title">{bundle.subcategoryTitle}</span>
+                    <span className="subcategory-bubble__title" style={{ color: getBubbleColor(bundle.subcategoryTitle) }}>{bundle.subcategoryTitle}</span>
                     <span className="subcategory-bubble__meta">
                       <span>{bundle.promptCount} prompts</span>
-                      <span>{bundle.tools.length} tools</span>
                     </span>
                     {tags.length ? (
                       <span className="subcategory-bubble__tags">
