@@ -5,9 +5,9 @@ export const SITE_DESCRIPTION =
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.promptverse.com';
 
 export const PRIMARY_NAV = [
+  { label: 'Search', href: '/#structured-search' },
   { href: '/image-prompts', label: 'Image' },
   { href: '/video-prompts', label: 'Video' },
   { href: '/audio-prompts', label: 'Audio' },
   { href: '/chat-prompts', label: 'Chat' },
-  
 ] as const;

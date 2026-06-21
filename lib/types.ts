@@ -48,3 +48,41 @@ export type SearchManifestSection = {
     difficulties: string[];
   }>;
 };
+
+
+export type SearchIndexEntry = {
+  id: string;
+  slug: string;
+  href: string;
+  title: string;
+  description: string;
+  category: string;
+  categoryLabel: string;
+  sectionSlug: string;
+  subcategory: string;
+  subcategorySlug: string;
+  tags: string[];
+  tools: string[];
+  template: string;
+  example: string;
+  referenceTokens: string[];
+  searchableText?: string;
+};
+
+
+export type StructuredSearchParams = {
+  searchText: string;
+  category: SectionSlug;
+  subcategory: string;
+};
+
+export type StructuredSearchResult = {
+  items: PromptRecord[];
+  total: number;
+  page: number;
+  perPage: number;
+  totalPages: number;
+  categoryLabel: string;
+  subcategoryLabel: string;
+  query: string;
+};

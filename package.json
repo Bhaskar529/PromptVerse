@@ -4,18 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/sync-content.mjs",
+    "prebuild": "node scripts/sync-content.mjs && node scripts/generate-search-index.mjs",
     "build": "next build",
     "start": "npx serve out",
     "typecheck": "tsc --noEmit",
     "content:check": "node scripts/content-quality-check.ts",
-    "content:audit": "node scripts/elite-content-audit.ts"
+    "content:audit": "node scripts/elite-content-audit.ts",
+    "search:index": "node scripts/generate-search-index.mjs"
   },
   "dependencies": {
     "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "lucide-react": "^0.453.0"
+    "lucide-react": "^0.453.0",
+    "fuse.js": "^7.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

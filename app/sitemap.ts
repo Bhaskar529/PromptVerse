@@ -7,7 +7,6 @@ import { SECTIONS } from '@/lib/sections';
 export default function sitemap(): MetadataRoute.Sitemap {
   const core = [
     '',
-    '/search',
     ...SECTIONS.map((section) => `/${section.slug}`),
     ...getAllSubcategoryPaths().map((entry) => `/${entry.sectionSlug}/${entry.slug}`),
     ...getAllPromptPaths().map((entry) => `/${entry.sectionSlug}/${entry.slug}`),

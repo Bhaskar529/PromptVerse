@@ -23,6 +23,37 @@ import {
 } from '@/lib/content';
 import { getSectionBySlug } from '@/lib/sections';
 
+
+function getPromptTitleGradient(prompt: {
+  title?: string;
+  subcategory?: string;
+  category?: string;
+}) {
+  const gradients: Array<{ match: string; gradient: string }> = [
+    { match: 'photography', gradient: 'linear-gradient(135deg, #d7c8ff 0%, #b48cff 48%, #8f63ff 100%)' },
+    { match: 'nature', gradient: 'linear-gradient(135deg, #7ee7a8 0%, #33d0a4 50%, #0ea5a4 100%)' },
+    { match: 'travel', gradient: 'linear-gradient(135deg, #8ed0ff 0%, #4ab8ff 50%, #55f2ff 100%)' },
+    { match: 'food', gradient: 'linear-gradient(135deg, #ffd36a 0%, #ffb347 48%, #ff8a3d 100%)' },
+    { match: 'architecture', gradient: 'linear-gradient(135deg, #7ee7f8 0%, #42cfff 48%, #5a8cff 100%)' },
+    { match: 'fashion', gradient: 'linear-gradient(135deg, #ffb1cb 0%, #ff7fb3 52%, #ff5fd2 100%)' },
+    { match: 'product photography', gradient: 'linear-gradient(135deg, #ffe082 0%, #f7c654 48%, #ff9f43 100%)' },
+    { match: 'automotive', gradient: 'linear-gradient(135deg, #79b6ff 0%, #4098ff 52%, #2b6fff 100%)' },
+    { match: 'anime', gradient: 'linear-gradient(135deg, #ff99d6 0%, #d779ff 50%, #9f6bff 100%)' },
+    { match: 'fantasy', gradient: 'linear-gradient(135deg, #ff6bb5 0%, #d04bff 48%, #8b5cf6 100%)' },
+    { match: 'marketing', gradient: 'linear-gradient(135deg, #ffb15b 0%, #ff9736 48%, #ffc14d 100%)' },
+    { match: 'business', gradient: 'linear-gradient(135deg, #f4cf62 0%, #ffd84f 52%, #fff08a 100%)' },
+    { match: 'coding', gradient: 'linear-gradient(135deg, #7db7ff 0%, #4d95ff 48%, #5b5fff 100%)' },
+    { match: 'ai', gradient: 'linear-gradient(135deg, #7f5cff 0%, #9b6dff 48%, #d3b8ff 100%)' },
+    { match: 'music', gradient: 'linear-gradient(135deg, #ff9cb7 0%, #f18cff 48%, #d2b6ff 100%)' },
+    { match: 'podcast', gradient: 'linear-gradient(135deg, #7be7d4 0%, #35d6c7 48%, #63d8ff 100%)' },
+    { match: 'documentary', gradient: 'linear-gradient(135deg, #8b8dff 0%, #5f7cff 48%, #56b6ff 100%)' },
+  ];
+
+  const haystack = `${prompt.subcategory ?? ''} ${prompt.category ?? ''} ${prompt.title ?? ''}`.toLowerCase();
+  return gradients.find(({ match }) => haystack.includes(match))?.gradient
+    ?? 'linear-gradient(135deg, #d7c8ff 0%, #b79cff 52%, #8a63ff 100%)';
+}
+
 export const dynamicParams = false;
 
 type Props = { params: Promise<{ typeSection: string; entrySlug: string }> };
@@ -113,7 +144,7 @@ export default async function DynamicTypePage({ params }: Props) {
           ))}
         </div>
         <p className="section-note mt-10">
-          Showing the first 48 prompts for maximum speed. Use the main search page for broader filtering across the library.
+          Showing the first 48 prompts for maximum speed. Browse the main category pages for broader discovery across the library.
         </p>
       </section>
     );
@@ -126,6 +157,7 @@ export default async function DynamicTypePage({ params }: Props) {
 
   const hasTags  = Array.isArray(prompt.tags)  && prompt.tags.length  > 0;
   const hasTools = Array.isArray(prompt.tools) && prompt.tools.length > 0;
+  const titleGradient = getPromptTitleGradient(prompt);
 
   return (
     <section className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 lg:px-8">
@@ -162,7 +194,15 @@ export default async function DynamicTypePage({ params }: Props) {
         {/* Title */}
         <h1
           className="verse-heading mt-5 font-display tracking-tight"
-          style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', lineHeight: 1.12 }}
+          style={{
+            fontSize: 'clamp(2rem, 4vw, 3.5rem)',
+            lineHeight: 1.12,
+            backgroundImage: titleGradient,
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+            textShadow: '0 10px 26px rgba(123, 120, 255, 0.12)',
+          }}
         >
           {prompt.title}
         </h1>

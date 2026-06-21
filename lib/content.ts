@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { getSectionByType, SECTIONS, slugify, titleCaseSlug, type PromptType } from '@/lib/sections';
-import type { PromptBundle, PromptRecord, SearchManifestSection } from '@/lib/types';
+import { getSectionBySlug, getSectionByType, SECTIONS, slugify, titleCaseSlug, type PromptType } from '@/lib/sections';
+import type { PromptBundle, PromptRecord, SearchManifestSection, StructuredSearchParams, StructuredSearchResult } from '@/lib/types';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'content');
 
@@ -418,4 +418,90 @@ export function getToolArchivePage(toolSlug: string, pageNumber = 1) {
 
 export function getToolPageData(toolSlug: string) {
   return getToolArchivePage(toolSlug, 1);
+}
+
+
+export const STRUCTURED_SEARCH_PAGE_SIZE = 20;
+
+function normalizeSearchValue(value: string) {
+  return String(value || '').trim();
+}
+
+export function getStructuredSearchOptions() {
+  return SECTIONS.map((section) => {
+    const typeData = buildLibrary().byType[section.type];
+    return {
+      value: section.slug,
+      label: section.title,
+      type: section.type,
+      subcategories: typeData.bundles.map((bundle) => ({
+        value: bundle.subcategorySlug,
+        label: bundle.subcategoryTitle,
+        count: bundle.promptCount,
+      })),
+    };
+  });
+}
+
+export function runStructuredSearch(params: StructuredSearchParams, pageNumber = 1): StructuredSearchResult | null {
+  const query = normalizeSearchValue(params.searchText);
+  const category = normalizeSearchValue(params.category);
+  const subcategory = normalizeSearchValue(params.subcategory);
+  if (!query || !category || !subcategory) return null;
+
+  const section = getSectionBySlug(category);
+  if (!section) return null;
+
+  const bundle = getSubcategoryPageData(section.type, subcategory);
+  if (!bundle) return null;
+
+  const Fuse = require('fuse.js');
+  const fuse = new Fuse(bundle.prompts, {
+    includeScore: true,
+    threshold: 0.38,
+    ignoreLocation: true,
+    minMatchCharLength: 2,
+    keys: [
+      { name: 'title', weight: 0.35 },
+      { name: 'description', weight: 0.2 },
+      { name: 'tags', weight: 0.12 },
+      { name: 'tools', weight: 0.1 },
+      { name: 'template', weight: 0.13 },
+      { name: 'examplePrompt', weight: 0.1 },
+    ],
+  });
+
+  const matches = fuse.search(query).map((entry: { item: PromptRecord }) => entry.item);
+  const total = matches.length;
+  const totalPages = Math.max(1, Math.ceil(total / STRUCTURED_SEARCH_PAGE_SIZE));
+  const page = Math.min(Math.max(1, pageNumber), totalPages);
+  const start = (page - 1) * STRUCTURED_SEARCH_PAGE_SIZE;
+
+  return {
+    items: matches.slice(start, start + STRUCTURED_SEARCH_PAGE_SIZE),
+    total,
+    page,
+    perPage: STRUCTURED_SEARCH_PAGE_SIZE,
+    totalPages,
+    categoryLabel: section.title,
+    subcategoryLabel: bundle.subcategoryTitle,
+    query,
+  };
+}
+
+export function getStructuredSearchFallbacks(sectionSlug?: string) {
+  const section = sectionSlug ? getSectionBySlug(sectionSlug) : null;
+  const featured = getFeaturedPrompts(3).slice(0, 6);
+  const categorySuggestions = getStructuredSearchOptions().map((item) => ({ value: item.value, label: item.label })).slice(0, 4);
+  const subcategorySuggestions = section
+    ? getStructuredSearchOptions().find((item) => item.value === section.slug)?.subcategories.slice(0, 6) || []
+    : getStructuredSearchOptions().flatMap((item) => item.subcategories.slice(0, 2)).slice(0, 6);
+  const popularSearches = getTagIndex().slice(0, 6).map((tag) => tag.label);
+
+  return {
+    categories: categorySuggestions,
+    subcategories: subcategorySuggestions,
+    popularSearches,
+    trendingPrompts: featured,
+  };
 }

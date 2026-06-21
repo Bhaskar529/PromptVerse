@@ -7,7 +7,15 @@ type Props = {
 };
 
 function hrefFor(basePath: string, page: number) {
-  return page <= 1 ? basePath : `${basePath}/page/${page}`;
+  const [pathname, queryString] = basePath.split('?');
+  if (!queryString) {
+    return page <= 1 ? pathname : `${pathname}/page/${page}`;
+  }
+  const params = new URLSearchParams(queryString);
+  if (page <= 1) params.delete('page');
+  else params.set('page', String(page));
+  const nextQuery = params.toString();
+  return nextQuery ? `${pathname}?${nextQuery}` : pathname;
 }
 
 function getPages(currentPage: number, totalPages: number) {

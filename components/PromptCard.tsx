@@ -52,7 +52,7 @@ function getPromptTitleGradient(prompt: PromptLike) {
 }
 
 export function PromptCard({ prompt }: { prompt: PromptLike }) {
-  const href = prompt.href || '/search';
+  const href = prompt.href || '/';
   const tags  = Array.isArray(prompt.tags) ? prompt.tags.filter(Boolean).slice(0, 4) : [];
   const tools = Array.isArray(prompt.tools) ? prompt.tools.filter(Boolean).slice(0, 2) : [];
   const diff  = (prompt.difficulty ?? 'intermediate').toLowerCase();

@@ -2,8 +2,9 @@ import { PromptCard } from '@/components/PromptCard';
 import { JsonLd } from '@/components/JsonLd';
 import { CategoryCard } from '@/components/CategoryCard';
 import { BrandLogo } from '@/components/BrandLogo';
+import { StructuredSearchForm } from '@/components/StructuredSearchForm';
 import { buildCollectionJsonLd, buildMetadata } from '@/lib/seo';
-import { getFeaturedPrompts, getLibraryOverview } from '@/lib/content';
+import { getFeaturedPrompts, getLibraryOverview, getStructuredSearchOptions } from '@/lib/content';
 import Link from 'next/link';
 
 export const metadata = buildMetadata({
@@ -17,6 +18,7 @@ export default function HomePage() {
   const overview = getLibraryOverview();
   const featured = getFeaturedPrompts(3);
   const totalPrompts = overview.reduce((sum, section) => sum + section.promptCount, 0);
+  const searchOptions = getStructuredSearchOptions();
 
   return (
     <>
@@ -46,12 +48,24 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section id="structured-search" className="mx-auto max-w-7xl scroll-mt-28 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="structured-home-search-shell">
+          <div className="structured-home-search-copy">
+            <p className="verse-kicker">Structured Search</p>
+            <h2>Search by keyword, category, and subcategory.</h2>
+            <p>
+              Discover prompts with precise filtering before you browse categories. The same shared search flow powers both this section and the search results experience.
+            </p>
+          </div>
+          <StructuredSearchForm options={searchOptions} />
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-5 lg:grid-cols-4">
           {overview.map((section) => <CategoryCard key={section.slug} section={section} />)}
         </div>
       </section>
-
 
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
